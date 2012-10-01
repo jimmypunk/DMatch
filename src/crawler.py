@@ -18,7 +18,7 @@ def main():
 	if(len(sys.argv) != 2):
 		print "[usage] python crawler.py url"
 		exit()
-	fetchImage(url)
+	fetchImage(argv[1])
 
 if __name__ =="__main__":
 	main()
