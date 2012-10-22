@@ -2,14 +2,26 @@ from operator import itemgetter
 import sys, os
 from stat import *
 import math
+from heapq import *
 def main():
 	# read from database?
 	# read from file?
 	layoutList = readData()
 	print len(layoutList[0])
 	print len(layoutList[1])
-	a = calcLayoutSimilarity(layoutList[0], layoutList[1])
-	print a
+	rankList = rank(layoutList[0],layoutList)
+	print 'baselayout:'+layoutList[0].getFilename()
+	print '=====ranking======'
+	for pair in rankList:
+		print pair[1].getFilename()+" cost:"+str(pair[0])+'\n';
+	print '================'
+def rank(baselayout, layoutList):
+	rankList = []
+	for layout in layoutList:
+		if(layout != baselayout):
+			similarity = calcLayoutSimilarity(baselayout,layout);
+			heappush(rankList,(similarity,layout));
+	return [heappop(rankList) for i in range(len(rankList))]
 def readData():
 	layoutList = []
 	for f in os.listdir('../data'):
@@ -22,7 +34,7 @@ def readData():
 				strList = line.strip().split()
 				box = [int(ele) for ele in strList]
 				boxList.append(box)
-			layoutList.append(Layout(boxList))
+			layoutList.append(Layout(boxList,f))
 	return layoutList
 
 def calcLayoutSimilarity(layout1, layout2):
@@ -48,7 +60,7 @@ def calcLayoutSimilarity(layout1, layout2):
 	for idx in availableIdx1:
 		extraCost += math.sqrt(layout1.getComp(idx).area())
 	for idx in availableIdx2:
-		extraCost += math.sqrt(layout2.getComp(idx))
+		extraCost += math.sqrt(layout2.getComp(idx).area())
 
 	return (totalCost + extraCost) / matchCount
 def costFunc(comp1, comp2):
@@ -60,12 +72,15 @@ def costFunc(comp1, comp2):
 	return cost
 
 class Layout:
-	def __init__(self, boxList):
+	def __init__(self, boxList, filename):
+		self.filename = filename
 		self.compList = []
 		for idx in range(len(boxList)):
 			self.compList.append(UIComp(boxList[idx]))
 	def getComp(self, idx):
 		return self.compList[idx];
+	def getFilename(self):
+		return self.filename
 	def __len__(self):
 		return len(self.compList)
 
