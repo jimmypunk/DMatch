@@ -1,3 +1,5 @@
+from layout import Layout
+from uicomp import UIComp
 from operator import itemgetter
 import sys, os
 from stat import *
@@ -53,6 +55,7 @@ def calcLayoutSimilarity(layout1, layout2):
 	matchCount = 0;
 	for pair in costEdgeList:
 		if pair[0] in availableIdx1 and pair[1] in availableIdx2:
+			#print "cost:"+str(pair[2])+ "idx:"+str(pair[0])+" "+str(pair[1])
 			totalCost += pair[2]
 			availableIdx1.remove(pair[0])
 			availableIdx2.remove(pair[1])
@@ -61,40 +64,15 @@ def calcLayoutSimilarity(layout1, layout2):
 		extraCost += math.sqrt(layout1.getComp(idx).area())
 	for idx in availableIdx2:
 		extraCost += math.sqrt(layout2.getComp(idx).area())
-
+	print "matchCount:"+str(matchCount)
 	return (totalCost + extraCost) / matchCount
 def costFunc(comp1, comp2):
-	w = 1
+	w = 2
 	x1,y1 = comp1.center()
 	x2,y2 = comp2.center()
 	cost = pow(x1 - x2, 2) + pow(y1 - y2, 2)
 	cost += w *math.sqrt(abs(comp1.area() - comp2.area()))
 	return cost
-
-class Layout:
-	def __init__(self, boxList, filename):
-		self.filename = filename
-		self.compList = []
-		for idx in range(len(boxList)):
-			self.compList.append(UIComp(boxList[idx]))
-	def getComp(self, idx):
-		return self.compList[idx];
-	def getFilename(self):
-		return self.filename
-	def __len__(self):
-		return len(self.compList)
-
-class UIComp:
-	#def __init__(self,box,tag):
-	def __init__(self,box):
-		self.x = box[0]
-		self.y = box[1]
-		self.w = box[2]
-		self.h = box[3]
-	def center(self):
-		return (self.x+self.w/2, self.y+self.h/2)
-	def area(self):
-		return self.w*self.h
 
 if __name__ == "__main__":
 	main()
