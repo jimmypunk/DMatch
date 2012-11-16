@@ -31,7 +31,7 @@ def readData():
 			exampleId = "exampleId="+fileName
 			category = "category=" + re.sub("_[0-9]*","",fileName)
 			print pathname
-			url = "http://warm-dawn-6848.herokuapp.com/create1?taskType=1&"+exampleId+"&"+category+"&worker=machine&iteration=1&"+data
+			url = "http://wireframe-prototyping.herokuapp.com/create1?taskType=1&"+exampleId+"&"+category+"&worker=machine&iteration=1&"+data
 			print url
 			tryCount = 0
 			while tryCount < 5:
