@@ -1,6 +1,7 @@
+
 class UIComp:
 	#def __init__(self,box,tag):
-	def __init__(self,box):
+	def __init__(self,box,tag=None):
 		self.x = box[0]
 		self.y = box[1]
 		self.w = box[2]
@@ -28,5 +29,7 @@ class UIComp:
 			return abs(tlX-lrX) * abs(tlY-lrY)
 			#return overlapW * overlapH
 		return 0
+	def toJSON(self):
+		return self.__dict__ 
 	def __repr__(self):
 		return 'x:'+str(self.x) + " y:" + str(self.y) + " w:" + str(self.w) + " h:" + str(self.h)
