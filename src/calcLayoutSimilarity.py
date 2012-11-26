@@ -17,6 +17,7 @@ def main():
 	for pair in rankList:
 		print pair[1].getFilename()+" cost:"+str(pair[0])+'\n';
 	print '================'
+   
 def rank(baselayout, layoutList):
 	rankList = []
 	for layout in layoutList:
@@ -24,6 +25,7 @@ def rank(baselayout, layoutList):
 			similarity = calcLayoutSimilarity(baselayout,layout);
 			heappush(rankList,(similarity,layout));
 	return [heappop(rankList) for i in range(len(rankList))]
+   
 def readData():
 	layoutList = []
 	for f in os.listdir('../data'):
@@ -64,7 +66,9 @@ def calcLayoutSimilarity(layout1, layout2):
 		extraCost += math.sqrt(layout1.getComp(idx).area())
 	for idx in availableIdx2:
 		extraCost += math.sqrt(layout2.getComp(idx).area())
-	print "matchCount:"+str(matchCount)
+	#print "matchCount:"+str(matchCount)
+	if matchCount == 0:
+		return 1000000000000
 	return (totalCost + extraCost) / matchCount
 def costFunc(comp1, comp2):
 	w = 2
