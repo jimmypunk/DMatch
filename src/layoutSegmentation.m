@@ -13,8 +13,8 @@ text(size(I,2),size(I,1)+25, ....
 %BWs = edge(I,'sobel', threshold * fudgeFactor);
 [BWs ,threshold] = edge(I,'canny');
 %figure, imshow(BWs), title('binary gradient mask');
-se90 = strel('line', 3, 90);
-se0 = strel('line', 3, 0);
+se90 = strel('line', 4, 90);
+se0 = strel('line', 5, 0);
 BWsdil = imdilate(BWs, [se90 se0]);
 %figure, imshow(BWsdil), title('dilated gradient mask');
 BWdfill = imfill(BWsdil, 'holes');
@@ -57,8 +57,8 @@ for i = 1:length(s)
    end
 end
 idx = idx -1;
-boxList = boxList(1:idx)
-boxList
+
+boxList = boxList(:,1:idx)
 hold off;
 %hist(areaList);
 %BWoutline = bwperim(BWfinal);
